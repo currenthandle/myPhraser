@@ -1,5 +1,6 @@
 <body>
   {{>prompt}}
+  {{>data}}
 </body>
 
 <template name="prompt">
@@ -14,10 +15,14 @@
         <input type="submit" value="Input URL">
     </form>
 </template>
-<!--
+
 <template name="data">
   <div>
-    <table>  
+    {{#each phrases}}
+      test
+      {{url}}
+    {{/each}}
   </div> 
-  </template>
-  -->  
+  <span>hi</span>  
+</template>
+  
