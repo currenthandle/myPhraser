@@ -1,4 +1,4 @@
-phrasesList = new Mongo.Collection('phrase');
+PhrasesList = new Mongo.Collection('phrase');
 
 if (Meteor.isClient) {
 
@@ -19,7 +19,7 @@ if (Meteor.isServer) {
     console.log('SERVER RUNNING');
     Meteor.methods({
         'getFile': function(url){
-            console.log(url);
+            //console.log(url);
             try{
                 var result = HTTP.call('GET', url);
                 console.log(result.content);
@@ -32,22 +32,22 @@ if (Meteor.isServer) {
             }
             console.log('url', url);
             console.log('result.content', result.content); 
-            var phraseCounts = Meteor.call('pairCounter', result.content);
-            console.log('phraseCounts',phraseCounts);
+            var phraseCounts = Meteor.call('pairCounter', result.content, url);
+            //console.log('phraseCounts',phraseCounts);
             //return phraseCounts;
             return 'hello';
         }, 
-        'pairCounter': function(doc){
-            console.log('made it to pairCounter'); 
+        'pairCounter': function(doc, url){
+            //console.log('made it to pairCounter'); 
             
-            console.log('doc', doc); 
+            //console.log('doc', doc); 
             var arrayified = Meteor.call('arrify', doc),       //returns an array where each element is a two word phrase containted in the original string 
             
             counted = Meteor.call('tally', arrayified);        //return an nested array, the first subarray contains all the unique 2 word phrases 
-            console.log('counted', counted);                             //the second subarray contains the 
+            //console.log('counted', counted);                             //the second subarray contains the 
                                                                 //correspondinc out for each phrase   
             var arranged = Meteor.call('arrange', counted);    //rearranges both subarrays such that they are in decending order 
-            var finalData = Meteor.call('display',arranged);
+            var finalData = Meteor.call('display',arranged,url);
             return finalData;     
         }, 
         'arrify': function(str){ 
@@ -116,23 +116,29 @@ if (Meteor.isServer) {
             }
             return [phrase, counts];
         },
-        'display': function(arr){                                  //prints out the phrases and the count for each phrase
+        'display': function(arr, url){                                      //prints out the phrases and the count for each phrase
             console.log('arr',arr)
-            var newArray = []
-            if(arr[0].length>10){                               //if there are more than 10 phrases. only print the first 10
+            var objArray = [],
+            returnArray = [];
+            if(arr[0].length>10){                                            //if there are more than 10 phrases. only print the first 10
                 for(var x = 0; x < 10; x++){
-                    newArray.push(arr[0][x]+': '+ arr[1][x]);
-                    console.log(arr[0][x]+': '+ arr[1][x]);
-                    phrasesList.insert(arr[0][x]+': '+ arr[1][x]);
+                    returnArray.push(arr[0][x]+': '+ arr[1][x]);
+                    console.log('show '+arr[0][x]+': '+ arr[1][x]);
+
+                    objArray.push({phrase: arr[0][x], count: arr[1][x]})
                 }
-            } else {                                            //otherwise print all the phrases and counts.
+            } else {                                                        //otherwise print all the phrases and counts.
                 for(var x = 0; x < arr[0].length; x++){
-                    newArray.push(arr[0][x]+': '+ arr[1][x]);
-                    phrasesList.insert(arr[0][x]+': '+ arr[1][x]);
+                    returnArray.push(arr[0][x]+': '+ arr[1][x]);
+                    console.log('show '+arr[0][x]+': '+ arr[1][x]);
+                    
+                    objArray.push({phrase: arr[0][x], count: arr[1][x]})
                 }
             }
-            console.log('newArray', newArray);
-            return newArray;
+            var obj = {url: url, phraseList: objArray};
+            console.log('obj', obj);
+            PhrasesList.insert(obj);
+            return returnArray;
                         
         }
     })
