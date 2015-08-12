@@ -1,28 +1,25 @@
-<body>
+<body style="background-color: light-grey">
   {{>prompt}}
-  {{>data}}
 </body>
-
+ 
 <template name="prompt">
     <div class="hero-unit">
-        <h1>URL</h1>
+      <h1 class="text-center">Phraser</h1>
+      <h3 class="text-center">The Phrase Counting Web App</h3>
     </div>
-    <div class="page-header">
-        <h1>URL</h1>
+    <div class="container"> 
+      <p class="lead">Input a URL in the fiel below and the most common two word phrases on the provided page along with
+    the number of times each phrase appears on the page will be shown.
+      </p>
     </div>
     <form>
+      <div class="form-group text-center vertical-center">
         <input type="text" name="inputUrl">
         <input type="submit" value="Input URL">
+      </div>  
     </form>
-</template>
-
-<template name="data">
-  <div>
-    {{#each phrases}}
-      test
-      {{url}}
-    {{/each}}
-  </div> 
-  <span>hi</span>  
-</template>
-  
+ 
+  <div class="container">
+    <p class="lead">{{file}}</p>  
+  </div>
+</template>  
