@@ -121,13 +121,14 @@ if (Meteor.isServer) {
             var newArray = []
             if(arr[0].length>10){                               //if there are more than 10 phrases. only print the first 10
                 for(var x = 0; x < 10; x++){
-                    newArray.push(arr[0][x]+':', arr[1][x]);
-                    phrasesList.insert(arr[0][x]+':', arr[1][x]);
+                    newArray.push(arr[0][x]+': '+ arr[1][x]);
+                    console.log(arr[0][x]+': '+ arr[1][x]);
+                    phrasesList.insert(arr[0][x]+': '+ arr[1][x]);
                 }
             } else {                                            //otherwise print all the phrases and counts.
                 for(var x = 0; x < arr[0].length; x++){
-                    newArray.push(arr[0][x]+':', arr[1][x]);
-                    phrasesList.insert(arr[0][x]+':', arr[1][x]);
+                    newArray.push(arr[0][x]+': '+ arr[1][x]);
+                    phrasesList.insert(arr[0][x]+': '+ arr[1][x]);
                 }
             }
             console.log('newArray', newArray);
