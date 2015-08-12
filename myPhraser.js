@@ -10,7 +10,7 @@ if (Meteor.isClient) {
             var inputUrl = event.target.inputUrl.value;
             
             var info = Meteor.call('getFile', inputUrl);
-            console.log(info);
+            console.log('info',info);
         }
     });
 }
@@ -34,8 +34,8 @@ if (Meteor.isServer) {
             console.log('result.content', result.content); 
             var phraseCounts = Meteor.call('pairCounter', result.content);
             console.log('phraseCounts',phraseCounts);
-            return phraseCounts;
-            
+            //return phraseCounts;
+            return 'hello';
         }, 
         'pairCounter': function(doc){
             console.log('made it to pairCounter'); 
@@ -47,7 +47,8 @@ if (Meteor.isServer) {
             console.log('counted', counted);                             //the second subarray contains the 
                                                                 //correspondinc out for each phrase   
             var arranged = Meteor.call('arrange', counted);    //rearranges both subarrays such that they are in decending order 
-            Meteor.call('display',arranged);     
+            var finalData = Meteor.call('display',arranged);
+            return finalData;     
         }, 
         'arrify': function(str){ 
             console.log('made it to arrify'); 
@@ -60,9 +61,7 @@ if (Meteor.isServer) {
             for(var j = 0; j < splitArray.length-1; j++){                       //creates a new array from the splitArray where each  
                 combindArray.push(splitArray[j]+' '+splitArray[j+1]);           //element is two word phrase contained in the original string
             }
-            if (combindArray[combindArray.length-1].indexOf('\n') !== -1){
                 
-            }
             console.log('combindArray',combindArray);
             return combindArray;
         },
@@ -118,21 +117,21 @@ if (Meteor.isServer) {
             return [phrase, counts];
         },
         'display': function(arr){                                  //prints out the phrases and the count for each phrase
-            console.log('made it to display')
-            console.log(arr)
+            console.log('arr',arr)
             var newArray = []
             if(arr[0].length>10){                               //if there are more than 10 phrases. only print the first 10
                 for(var x = 0; x < 10; x++){
                     newArray.push(arr[0][x]+':', arr[1][x]);
-                    //phrasesList.insert(arr[0][x]+':', arr[1][x]);
+                    phrasesList.insert(arr[0][x]+':', arr[1][x]);
                 }
             } else {                                            //otherwise print all the phrases and counts.
                 for(var x = 0; x < arr[0].length; x++){
                     newArray.push(arr[0][x]+':', arr[1][x]);
-                    //phrasesList.insert(arr[0][x]+':', arr[1][x]);
+                    phrasesList.insert(arr[0][x]+':', arr[1][x]);
                 }
             }
-            //return newArray;
+            console.log('newArray', newArray);
+            return newArray;
                         
         }
     })
